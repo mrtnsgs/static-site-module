@@ -8,7 +8,7 @@ jobs:
   terraform-init-fmt-validate-plan:
     runs-on: ubuntu-latest
     container:
-      image: mrtnsgs/terraform-aws:1.0
+      image: mrtnsgs/nodejs-lts-aws:1.0
     steps:
       - name: Check out code
         uses: actions/checkout@v2
@@ -23,9 +23,7 @@ jobs:
         with:
           terraform_version: 0.14.4
       - name: Run terraform init
-        run: |
-          pwd ; ls -alh
-          terraform init -backend=true -backend-config="backend.hcl"
+        run: terraform init -backend=true -backend-config="backend.hcl"
       - name: Run Terraform fmt
         run: terraform fmt -recursive
       - name: Terraform validate
