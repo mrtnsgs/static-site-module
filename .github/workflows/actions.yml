@@ -1,6 +1,6 @@
 name: Shell Commands
 
-on: 
+on:
   push:
     branches:
       - main
@@ -10,6 +10,8 @@ jobs:
     container:
       image: mrtnsgs/alpine-aws:1.0
     steps:
+      - name: Check out code
+        uses: actions/checkout@v2
       - name: Setting up aws credentials
         run: |
           mkdir -p ~/.aws
@@ -20,18 +22,17 @@ jobs:
       - uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 0.14.4
-      - name: Check out code
-        uses: actions/checkout@v2
       - name: Run terraform init
-        run: export $PROFILE=${{ secrets.AWS_PROFILE }}; terraform init -backend=true -backend-config="backend.hcl"
+        run: |
+          pwd ; ls -alh
+          terraform init -backend=true -backend-config="backend.hcl"
       - name: Run Terraform fmt
         run: terraform fmt -recursive
       - name: Terraform validate
         run: terraform validate
       - name: Run Terraform plan and generate
-        run: export $PROFILE=${{ secrets.AWS_PROFILE }}; terraform plan -no-color
+        run: terraform plan -no-color
         continue-on-error: true
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: export $PROFILE=${{ secrets.AWS_PROFILE }}; terraform apply -auto-approve
-
+        run: terraform apply -auto-approve
