@@ -29,15 +29,15 @@ jobs:
       - name: Set terraform workspace
         run: |
           if [ "${{github.ref}}" == "refs/heads/main" ]; then
-            echo "prod" >> $TF_WORKSPACE;
+            echo "prod" >> $GITHUB_ENV;
           else
-            echo "dev" >> $TF_WORKSPACE;
+            echo "dev" >> $GITHUB_ENV;
           fi
 
       - name: Run terraform init
         run: terraform init -backend=true -backend-config="backend.hcl"
         env:
-          TF_WORKSPACE: $TERRAFORM_ENV
+          TF_WORKSPACE: $GITHUB_ENV
 
       - name: Run Terraform fmt
         run: terraform fmt -recursive
