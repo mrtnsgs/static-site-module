@@ -29,19 +29,10 @@ jobs:
 
       - name: Terraform init dev backend
         run: terraform init -backend=true -backend-config="backend.hcl" -input=false
-        #if: github.ref == 'refs/heads/develop'
-        #env:
-        #  TF_WORKSPACE: dev
-
-      #- name: Terraform init prod backend
-      #  run: terraform init -backend=true -backend-config="backend.hcl" -input=false
-      #  if: github.ref == 'refs/heads/main'
-      #  env:
-      #    TF_WORKSPACE: prod
 
       - name: Create namespace through branch name
         run: |
-         if [ "${{github.ref}}" == "refs/heads/master" ]; then
+         if [ "${{github.ref}}" == "refs/heads/main" ]; then
             terraform workspace new prod
          else
             terraform workspace new dev
