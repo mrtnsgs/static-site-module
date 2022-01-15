@@ -26,18 +26,20 @@ jobs:
       - uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 0.14.4
+
       - name: Set terraform workspace
         run: |
           if [ "${{github.ref}}" == "refs/heads/main" ]; then
-            echo "prod" >> $GITHUB_ENV;
+            echo "ENV=dev" >> $GITHUB_ENV;
           else
-            echo "dev" >> $GITHUB_ENV;
+            echo "ENV=prod" >> $GITHUB_ENV;
           fi
+          echo $ENV
 
       - name: Run terraform init
-        run: terraform init -backend=true -backend-config="backend.hcl"
+        run: terraform init -backend=true -backend-config="backend.hcl" -input=false
         env:
-          TF_WORKSPACE: $GITHUB_ENV
+          TF_WORKSPACE: $ENV
 
       - name: Run Terraform fmt
         run: terraform fmt -recursive
