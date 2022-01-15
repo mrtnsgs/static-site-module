@@ -27,8 +27,17 @@ jobs:
         with:
           terraform_version: 0.14.4
 
-      - name: Terraform init without backend
-        run: terraform init
+      - name: Terraform init dev backend
+        run: terraform init -backend=true -backend-config="backend.hcl" -input=false
+        #if: github.ref == 'refs/heads/develop'
+        #env:
+        #  TF_WORKSPACE: dev
+
+      #- name: Terraform init prod backend
+      #  run: terraform init -backend=true -backend-config="backend.hcl" -input=false
+      #  if: github.ref == 'refs/heads/main'
+      #  env:
+      #    TF_WORKSPACE: prod
 
       - name: Create namespace through branch name
         run: |
@@ -37,18 +46,7 @@ jobs:
          else
             terraform workspace new dev
          fi
-
-      - name: Terraform init dev backend
-        run: terraform init -backend=true -backend-config="backend.hcl" -input=false
-        if: github.ref == 'refs/heads/develop'
-        env:
-          TF_WORKSPACE: dev
-
-      - name: Terraform init prod backend
-        run: terraform init -backend=true -backend-config="backend.hcl" -input=false
-        if: github.ref == 'refs/heads/main'
-        env:
-          TF_WORKSPACE: prod
+         echo terraform workspace show
 
       - name: Run Terraform fmt
         run: terraform fmt -recursive
