@@ -33,11 +33,11 @@ jobs:
       - name: Create namespace through branch name
         run: |
          if [ "${{github.ref}}" == "refs/heads/main" ]; then
-            terraform workspace new prod
+            terraform workspace select prod || terraform workspace new prod
          else
-            terraform workspace new dev
+            terraform workspace select dev || terraform workspace new dev
          fi
-         echo terraform workspace show
+         terraform workspace show
 
       - name: Run Terraform fmt
         run: terraform fmt -recursive
