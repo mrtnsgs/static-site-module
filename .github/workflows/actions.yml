@@ -27,6 +27,14 @@ jobs:
         with:
           terraform_version: 0.14.4
 
+      - name: Create namespace through branch name
+        run: |
+         if [ "${{github.ref}}" == "refs/heads/master" ]; then
+            terraform workspace new prod
+         else
+            terraform workspace new dev
+         fi
+
       - name: Run terraform init
         run: terraform init -backend=true -backend-config="backend.hcl" -input=false
         if: github.ref == 'refs/heads/develop'
