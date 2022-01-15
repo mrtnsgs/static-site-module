@@ -16,6 +16,10 @@ provider "aws" {
   profile = var.aws_profile
 }
 
+locals {
+  env = terraform.workspace == "default" ? "dev" : terraform.workspace
+}
+
 resource "random_pet" "this" {
   length = 5
 }
