@@ -13,4 +13,4 @@ The tfstate has saved on different s3 bucket and lock state saved on DynamoDB.
 - [x] Module to send the files to the bucket
 - [ ] Module to configure cloudfront
 - [ ] Module to generate SSL certificate
-- [ ] CI/CD to deploy
+- [x] CI/CD to deploy

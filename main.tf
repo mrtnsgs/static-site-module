@@ -20,22 +20,22 @@ locals {
   env = terraform.workspace == "default" ? "dev" : terraform.workspace
 }
 
-resource "random_pet" "this" {
-  length = 5
-}
+#resource "random_pet" "this" {
+#  length = 5
+#}
 
 module "bucket" {
   source = "./s3_module"
-  name   = random_pet.this.id
+  name   = var.bucket_name
 }
 
-resource "random_pet" "website" {
-  length = 5
-}
+#resource "random_pet" "website" {
+#  length = 5
+#}
 
 module "website" {
   source = "./s3_module"
-  name   = random_pet.website.id
+  name   = var.bucket_name
 
   versioning = {
     enabled = true
@@ -60,7 +60,7 @@ module "website" {
         "s3:GetObject"
       ],
       "Resource": [
-        "arn:aws:s3:::${random_pet.website.id}/*"
+        "arn:aws:s3:::${var.bucket_name}/*"
       ]
     }
   ]
