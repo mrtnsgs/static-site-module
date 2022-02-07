@@ -9,3 +9,9 @@ variable "aws_profile" {
   description = "AWS Profile with the credentials"
   default     = "default"
 }
+
+variable "bucket_name" {
+ type = string
+ description  = "Bucket name"
+ default = "bucket-website-test-mrtnsgs"
+}
